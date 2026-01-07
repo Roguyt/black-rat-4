@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CONF_FILE="telegram.conf"
+BACKUP_FILE=".telegram.conf.bak"
+
+if [ -f "$BACKUP_FILE" ]; then
+  echo "[post-commit] Restoring $CONF_FILE from backup..."
+  mv "$BACKUP_FILE" "$CONF_FILE"
+  echo "[post-commit] Restore complete."
+fi

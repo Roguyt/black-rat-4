@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CONF_FILE="telegram.conf"
+BACKUP_FILE=".telegram.conf.bak"
+
+if [ -f "$CONF_FILE" ]; then
+  echo "[pre-commit] Scrubbing sensitive info from $CONF_FILE..."
+
+  # Backup the full config with secrets
+  cp "$CONF_FILE" "$BACKUP_FILE"
+
+  # Remove lines with bot_token and chat_id
+  sed -i -e '/^[[:space:]]*bot_token[[:space:]]*:/d' \
+         -e '/^[[:space:]]*chat_id[[:space:]]*:/d' "$CONF_FILE"
+
+  # Re-add the sanitized file to the index
+  git add "$CONF_FILE"
+
+  echo "[pre-commit] Sensitive info removed and changes staged."
+fi
